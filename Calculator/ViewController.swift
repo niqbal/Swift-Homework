@@ -10,16 +10,19 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
+    @IBOutlet weak var result: UILabel!
+    
+    var isFirstDigit = true;
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func appendDigit(sender: UIButton) {
+        if (isFirstDigit) {
+            isFirstDigit = false;
+            result.text = sender.currentTitle
+        } else {
+            result.text = result.text! + sender.currentTitle!;
+        }
     }
-
+    
 
 }
 
