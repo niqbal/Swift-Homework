@@ -30,22 +30,22 @@ class ViewController: UIViewController {
         if (userIsInTheMiddleofTypingANumber) {
             enter()
         }
-        if (numberStack.count < 2) {
-            return;
-        }
 
         switch(operation) {
         case "×":
-            displayValue = performOperation(numberStack.removeLast(), op2: numberStack.removeLast(), op: *);
+            displayValue = doBinaryOp {$0 * $1};
             break;
         case "÷":
-            displayValue = performOperation(numberStack.removeLast(), op2: numberStack.removeLast(), op: /);
+            displayValue = doBinaryOp {$1 / $0};
             break;
         case "+":
-            displayValue = performOperation(numberStack.removeLast(), op2: numberStack.removeLast(), op: +);
+            displayValue = doBinaryOp {$0 + $1};
             break;
         case "−":
-            displayValue = performOperation(numberStack.removeLast(), op2: numberStack.removeLast(), op: -);
+            displayValue = doBinaryOp {$1 - $0};
+            break;
+        case "√":
+            displayValue = doUnaryOp {sqrt($0)};
             break;
         default:
             break;
@@ -54,8 +54,19 @@ class ViewController: UIViewController {
         enter()
     }
     
-    func performOperation(op1 : Double, op2 : Double, op : (Double,Double) -> Double) -> Double {
-        return op(op2, op1);
+    func doBinaryOp(op : (Double,Double) -> Double) -> Double {
+        if (numberStack.count >= 2) {
+            return op(numberStack.removeLast(), numberStack.removeLast());
+        }
+        
+        return 0;
+    }
+    
+    func doUnaryOp(op : Double -> Double) -> Double {
+        if (numberStack.count >= 1) {
+            return op(numberStack.removeLast());
+        }
+        return 0;
     }
     
     
