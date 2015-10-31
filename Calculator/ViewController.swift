@@ -25,6 +25,41 @@ class ViewController: UIViewController {
     }
     
 
+    @IBAction func operate(sender: UIButton) {
+        let operation = sender.currentTitle!
+        if (userIsInTheMiddleofTypingANumber) {
+            enter()
+        }
+        if (numberStack.count < 2) {
+            return;
+        }
+
+        switch(operation) {
+        case "×":
+            displayValue = performOperation(numberStack.removeLast(), op2: numberStack.removeLast(), op: *);
+            break;
+        case "÷":
+            displayValue = performOperation(numberStack.removeLast(), op2: numberStack.removeLast(), op: /);
+            break;
+        case "+":
+            displayValue = performOperation(numberStack.removeLast(), op2: numberStack.removeLast(), op: +);
+            break;
+        case "−":
+            displayValue = performOperation(numberStack.removeLast(), op2: numberStack.removeLast(), op: -);
+            break;
+        default:
+            break;
+        }
+        
+        enter()
+    }
+    
+    func performOperation(op1 : Double, op2 : Double, op : (Double,Double) -> Double) -> Double {
+        return op(op2, op1);
+    }
+    
+    
+    
     @IBAction func enter() {
         userIsInTheMiddleofTypingANumber = false;
         numberStack.append(displayValue)
