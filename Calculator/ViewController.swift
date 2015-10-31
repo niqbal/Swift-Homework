@@ -11,12 +11,13 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var result: UILabel!
+    var numberStack = Array<Double>()
     
-    var isFirstDigit = true;
+    var userIsInTheMiddleofTypingANumber = false;
 
     @IBAction func appendDigit(sender: UIButton) {
-        if (isFirstDigit) {
-            isFirstDigit = false;
+        if (!userIsInTheMiddleofTypingANumber) {
+            userIsInTheMiddleofTypingANumber = true;
             result.text = sender.currentTitle
         } else {
             result.text = result.text! + sender.currentTitle!;
@@ -24,5 +25,22 @@ class ViewController: UIViewController {
     }
     
 
+    @IBAction func enter() {
+        userIsInTheMiddleofTypingANumber = false;
+        numberStack.append(displayValue)
+        print("operandStack = \(numberStack)")
+    }
+
+    // computer property
+    var displayValue : Double {
+        get {
+            //return Double.init(result.text!)!
+            return NSNumberFormatter().numberFromString(result.text!)!.doubleValue
+        }
+        set {
+            result.text = "\(newValue)"
+            userIsInTheMiddleofTypingANumber = false;
+        }
+    }
 }
 
