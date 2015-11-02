@@ -10,23 +10,35 @@ import Foundation
 
 class CalculatorBrain
 {
-    enum Op {
+    enum Op : CustomStringConvertible {
         case Operand(Double)
         case UnaryOperator(String, Double -> Double);
         case BinaryOperator(String, (Double, Double) -> Double);
         
+        var description: String {
+            get {
+                switch self {
+                case .Operand(let x) :
+                    return "\(x)"
+                case .UnaryOperator(let x, _):
+                    return x;
+                case .BinaryOperator(let x, _):
+                    return x;
+                }
+            }
+        }
     }
   
     init() {
-//        func learnOp(sym: String, op: Op) {
-//            knownOps[sym] = op;
-//        }
+        func learnOp(op: Op) {
+            knownOps[op.description] = op;
+        }
 
-        knownOps["×"] = Op.BinaryOperator("×", *);
-        knownOps["÷"] = Op.BinaryOperator("÷") {$1 / $0};
-        knownOps["+"] = Op.BinaryOperator("+", +);
-        knownOps["−"] = Op.BinaryOperator("−") {$1 - $0};
-        knownOps["√"] = Op.UnaryOperator("√", sqrt);
+        learnOp(Op.BinaryOperator("×", *));
+        learnOp(Op.BinaryOperator("÷") {$1 / $0});
+        learnOp(Op.BinaryOperator("+", +));
+        learnOp(Op.BinaryOperator("−") {$1 - $0});
+        learnOp(Op.UnaryOperator("√", sqrt));
     }
     
     var historyStack = [Op]();
@@ -77,7 +89,9 @@ class CalculatorBrain
     
     func evaluate() -> Double? {
         let (result, remainder) = evaluate(historyStack)
-        if (result == nil || remainder.count > 0) {
+        print("result = \(result) with remainder = \(remainder)");
+        
+        if (result == nil) {
             return nil;
         }
         
