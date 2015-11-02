@@ -13,6 +13,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var result: UILabel!
     var numberStack = Array<Double>()
     
+    var brain = CalculatorBrain();
+    
     var userIsInTheMiddleofTypingANumber = false;
 
     @IBAction func appendDigit(sender: UIButton) {
@@ -26,32 +28,20 @@ class ViewController: UIViewController {
     
 
     @IBAction func operate(sender: UIButton) {
-        let operation = sender.currentTitle!
         if (userIsInTheMiddleofTypingANumber) {
             enter()
         }
 
-        switch(operation) {
-        case "×":
-            displayValue = doBinaryOp {$0 * $1};
-            break;
-        case "÷":
-            displayValue = doBinaryOp {$1 / $0};
-            break;
-        case "+":
-            displayValue = doBinaryOp {$0 + $1};
-            break;
-        case "−":
-            displayValue = doBinaryOp {$1 - $0};
-            break;
-        case "√":
-            displayValue = doUnaryOp {sqrt($0)};
-            break;
-        default:
-            break;
+        if let operation = sender.currentTitle {
+            if let res = brain.pushOperator(operation) {
+                displayValue = res
+            } else {
+                displayValue = 0
+            }
         }
         
-        enter()
+        // todo: why did we remove the enter?
+//        enter()
     }
     
     func doBinaryOp(op : (Double,Double) -> Double) -> Double {
@@ -73,8 +63,11 @@ class ViewController: UIViewController {
     
     @IBAction func enter() {
         userIsInTheMiddleofTypingANumber = false;
-        numberStack.append(displayValue)
-        print("operandStack = \(numberStack)")
+        if let resf = brain.pushOperand(displayValue) {
+            displayValue = resf
+        } else {
+            displayValue = 0
+        }
     }
 
     // computer property
