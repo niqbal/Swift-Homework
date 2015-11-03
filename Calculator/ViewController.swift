@@ -11,9 +11,11 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var result: UILabel!
-    var numberStack = Array<Double>()
+    
     
     var brain = CalculatorBrain();
+    
+    @IBOutlet weak var stackOutput: UILabel!
     
     var userIsInTheMiddleofTypingANumber = false;
 
@@ -37,30 +39,15 @@ class ViewController: UIViewController {
             
             if let resf = res.result  {
                 displayValue = resf
+                stackOutput.text = "";
             } else {
-//                displayValue = 0
-                result.text = "\(res.remainingOps)"
+                displayValue = 0
+                stackOutput.text = "\(res.remainingOps)"
             }
         }
         
         
     }
-    
-    func doBinaryOp(op : (Double,Double) -> Double) -> Double {
-        if (numberStack.count >= 2) {
-            return op(numberStack.removeLast(), numberStack.removeLast());
-        }
-        
-        return 0;
-    }
-    
-    func doUnaryOp(op : Double -> Double) -> Double {
-        if (numberStack.count >= 1) {
-            return op(numberStack.removeLast());
-        }
-        return 0;
-    }
-    
     
     
     @IBAction func enter() {
@@ -68,9 +55,10 @@ class ViewController: UIViewController {
         let res = brain.pushOperand(displayValue)
         if let resf = res.result  {
             displayValue = resf
+            stackOutput.text = "";
         } else {
-            result.text = "\(res.remainingOps)"
-//            displayValue = 0
+            displayValue = 0
+            stackOutput.text = "\(res.remainingOps)"
         }
     }
 
