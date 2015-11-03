@@ -51,7 +51,13 @@ class CalculatorBrain
         return nil
     }
     
-    var program : AnyObject {
+    func clearStack() {
+        historyStack.removeAll();
+    }
+
+    typealias PropertyList = AnyObject
+    
+    var program : PropertyList {
         get {
             return historyStack.map { $0.description};
         }
@@ -65,7 +71,6 @@ class CalculatorBrain
     
     var historyStack = [Op]();
     var knownOps = [String:Op]();
-    //Dictionary<String, Op>();
     
     func pushOperand(operand: Double) -> (result: Double?, remainingOps: [Op])  {
         historyStack.append(Op.Operand(operand));

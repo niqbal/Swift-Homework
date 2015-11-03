@@ -13,12 +13,19 @@ class ViewController: UIViewController {
     @IBOutlet weak var result: UILabel!
     
     
+    var m1 : AnyObject;
+    
     var brain = CalculatorBrain();
     
     @IBOutlet weak var stackOutput: UILabel!
     
     var userIsInTheMiddleofTypingANumber = false;
 
+    required init?(coder aDecoder: NSCoder) {
+        m1 = Array<String>();
+        super.init(coder: aDecoder);
+    }
+    
     @IBAction func appendDigit(sender: UIButton) {
         if (!userIsInTheMiddleofTypingANumber) {
             userIsInTheMiddleofTypingANumber = true;
@@ -29,6 +36,20 @@ class ViewController: UIViewController {
     }
     
 
+    @IBAction func clearCurrentStack() {
+        displayValue = 0;
+        brain.clearStack();
+    }
+    
+    @IBAction func memorize(sender: UIButton) {
+        m1 = brain.program;
+    }
+    
+    
+    @IBAction func recall(sender: UIButton) {
+        brain.program = m1;
+    }
+    
     @IBAction func operate(sender: UIButton) {
         if (userIsInTheMiddleofTypingANumber) {
             enter()
