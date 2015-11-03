@@ -33,15 +33,17 @@ class ViewController: UIViewController {
         }
 
         if let operation = sender.currentTitle {
-            if let res = brain.pushOperator(operation) {
-                displayValue = res
+            let res = brain.pushOperator(operation)
+            
+            if let resf = res.result  {
+                displayValue = resf
             } else {
-                displayValue = 0
+//                displayValue = 0
+                result.text = "\(res.remainingOps)"
             }
         }
         
-        // todo: why did we remove the enter?
-//        enter()
+        
     }
     
     func doBinaryOp(op : (Double,Double) -> Double) -> Double {
@@ -63,10 +65,12 @@ class ViewController: UIViewController {
     
     @IBAction func enter() {
         userIsInTheMiddleofTypingANumber = false;
-        if let resf = brain.pushOperand(displayValue) {
+        let res = brain.pushOperand(displayValue)
+        if let resf = res.result  {
             displayValue = resf
         } else {
-            displayValue = 0
+            result.text = "\(res.remainingOps)"
+//            displayValue = 0
         }
     }
 

@@ -45,12 +45,12 @@ class CalculatorBrain
     var knownOps = [String:Op]();
     //Dictionary<String, Op>();
     
-    func pushOperand(operand: Double) -> Double? {
+    func pushOperand(operand: Double) -> (result: Double?, remainingOps: [Op])  {
         historyStack.append(Op.Operand(operand));
         return evaluate();
     }
     
-    func pushOperator(symbol: String) -> Double? {
+    func pushOperator(symbol: String) -> (result: Double?, remainingOps: [Op])  {
         historyStack.append(knownOps[symbol]!);
         return evaluate();
     }
@@ -87,15 +87,15 @@ class CalculatorBrain
         return (nil, ops);
     }
     
-    func evaluate() -> Double? {
+    func evaluate() -> (result: Double?, remainingOps: [Op])  {
         let (result, remainder) = evaluate(historyStack)
         print("result = \(result) with remainder = \(remainder)");
         
         if (result == nil) {
-            return nil;
+            return (nil, remainder);
         }
         
-        return result;
+        return (result, remainder);
     }
     
     
